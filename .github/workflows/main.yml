@@ -9,8 +9,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  cache-and-install:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,10 +30,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: install
-        run: pnpm i
-
+  build:
+    needs: cache-and-install
+    runs-on: ubuntu-latest
+    steps:
       - name: Build
         run: pnpm build
         env:
