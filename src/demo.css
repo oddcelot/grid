@@ -1,0 +1,30 @@
+@layer demo {
+    :root {
+        --radius: 12px;
+        --warm-grey: #2f3231;
+        --green: #00f4a3;
+        --ocean-grey: #435e72;
+        --gradient: linear-gradient(
+            in oklab 108deg,
+            #00f4a3 -3.55%,
+            #00e5f4 100%
+        );
+    }
+
+    body {
+        font-family: ui-monospace, monospace;
+        background: var(--warm-grey);
+        padding: 2rem;
+        color: #fff;
+    }
+
+    #root {
+        width: 100%;
+    }
+
+    label {
+        display: grid;
+        grid-template-columns: 1;
+        gap: 0.5rem;
+    }
+}
