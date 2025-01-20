@@ -10,6 +10,7 @@ const flowOptions = [
   "dense",
 ] as const;
 type FlowOptions = (typeof flowOptions)[number];
+
 function App() {
   const [columns, setColumns] = createSignal(4);
   const [minSize, setMinSize] = createSignal(10);
@@ -82,6 +83,7 @@ function App() {
                   name="flow"
                   id="auto-grid-gap"
                   type="radio"
+                  checked={option === flow()}
                   value={option}
                   onInput={(ev) =>
                     setFlow(ev.currentTarget.value as typeof option)
