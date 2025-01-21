@@ -2,104 +2,104 @@
 @import "./demo.css";
 
 @property --row-span {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 1;
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
 }
 
 @property --col-span {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 1;
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
 }
 
 :root {
-    --auto-grid-max-columns: 6;
-    --auto-grid-min-size: 10rem;
-    --auto-grid-gap: 2rem;
+  --auto-grid-max-columns: 6;
+  --auto-grid-min-size: 10rem;
+  --auto-grid-gap: 2rem;
 
-    --item-r-span: 1;
-    --item-c-span: 1;
+  --item-r-span: 1;
+  --item-c-span: 1;
 
-    --item-max-c-span: infinity;
-    --item-max-r-span: infinity;
+  --item-max-c-span: infinity;
+  --item-max-r-span: infinity;
 }
 
 .auto-grid {
-    --max-column-width: 100% / var(--auto-grid-max-columns, infinity) -
-        var(--auto-grid-gap);
-    --column-width: max(
-        var(--max-column-width),
-        min(var(--auto-grid-min-size, 10rem), 100%)
-    );
+  --max-column-width: 100% / var(--auto-grid-max-columns, infinity) -
+    var(--auto-grid-gap);
+  --column-width: max(
+    var(--max-column-width),
+    min(var(--auto-grid-min-size, 10rem), 100%)
+  );
 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--column-width), 1fr));
-    grid-template-columns: repeat(auto-fit, minmax(min-content, 1fr));
-    grid-auto-flow: var(--auto-grid-flow, dense);
-    /* vertical gap falls back to general gap then falls back to 1rem */
-    gap: var(--auto-grid-gap-vertical, var(--auto-grid-gap, 1rem))
-        var(--auto-grid-gap, 1rem);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--column-width), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 1fr));
+  grid-auto-flow: var(--auto-grid-flow, dense);
+  /* vertical gap falls back to general gap then falls back to 1rem */
+  gap: var(--auto-grid-gap-vertical, var(--auto-grid-gap, 1rem))
+    var(--auto-grid-gap, 1rem);
 
-    container-type: inline-size;
-    container-name: auto-grid;
+  container-type: inline-size;
+  container-name: auto-grid;
 }
 
 .item {
-    --c-span: min(var(--item-c-span), var(--item-max-c-span));
-    --r-span: min(var(--item-r-span), var(--item-max-r-span));
+  --c-span: min(var(--item-c-span), var(--item-max-c-span));
+  --r-span: min(var(--item-r-span), var(--item-max-r-span));
 
-    /* aspect-ratio: calc(var(--c-span) / var(--r-span)); */
+  /* aspect-ratio: calc(var(--c-span) / var(--r-span)); */
 
-    aspect-ratio: auto;
-    height: 100%;
-    width: 100%;
-    min-height: var(--auto-grid-min-size);
-    /* set if content is critical min-width */
-    /* min-width: var(--auto-grid-min-size); */
-    grid-column: span min(var(--item-c-span), auto-fit);
-    grid-row: span min(var(--item-r-span), auto-fit);
-    grid-column: span min(var(--item-max-c-span), var(--item-c-span));
-    grid-column: span var(--item-c-span);
-    grid-row: span var(--item-r-span);
-    grid-column: span var(--c-span);
-    grid-row: span var(--r-span);
+  aspect-ratio: auto;
+  height: 100%;
+  width: 100%;
+  min-height: var(--auto-grid-min-size);
+  /* set if content is critical min-width */
+  /* min-width: var(--auto-grid-min-size); */
+  grid-column: span min(var(--item-c-span), auto-fit);
+  grid-row: span min(var(--item-r-span), auto-fit);
+  grid-column: span min(var(--item-max-c-span), var(--item-c-span));
+  grid-column: span var(--item-c-span);
+  grid-row: span var(--item-r-span);
+  grid-column: span var(--c-span);
+  grid-row: span var(--r-span);
 
-    &.keep-aspect {
-        aspect-ratio: calc(var(--c-span) / var(--r-span));
-    }
+  &.keep-aspect {
+    aspect-ratio: calc(var(--c-span) / var(--r-span));
+  }
 }
 
 .span-c-1 {
-    --item-c-span: 1;
+  --item-c-span: 1;
 }
 .span-r-1 {
-    --item-r-span: 1;
+  --item-r-span: 1;
 }
 .span-c-2 {
-    --item-c-span: 2;
+  --item-c-span: 2;
 }
 .span-r-2 {
-    --item-r-span: 2;
+  --item-r-span: 2;
 }
 
 .span-c-3 {
-    --item-c-span: 3;
+  --item-c-span: 3;
 }
 .span-r-3 {
-    --item-r-span: 3;
+  --item-r-span: 3;
 }
 .span-c-4 {
-    --item-c-span: 4;
+  --item-c-span: 4;
 }
 .span-r-4 {
-    --item-r-span: 4;
+  --item-r-span: 4;
 }
 .span-c-5 {
-    --item-c-span: 4;
+  --item-c-span: 4;
 }
 .span-r-5 {
-    --item-r-span: 4;
+  --item-r-span: 4;
 }
 
 /*2x the min-size + gap * cols */
@@ -123,119 +123,132 @@
 } */
 
 .resize {
-    padding: var(--auto-grid-gap);
-    border-radius: 1rem;
-    border-end-end-radius: 0;
-    border: 1px solid var(--green);
-    min-width: calc(var(--auto-grid-min-size) + var(--auto-grid-gap) * 2);
-    resize: horizontal;
-    overflow: hidden;
-    position: relative;
-    max-width: 100%;
+  padding: var(--auto-grid-gap);
+  border-radius: 1rem;
+  border-end-end-radius: 0;
+  border: 1px solid var(--green);
+  min-width: calc(var(--auto-grid-min-size) + var(--auto-grid-gap) * 2);
+  resize: horizontal;
+  overflow: hidden;
+  position: relative;
+  max-width: 100%;
 
-    &::after {
-        content: "resize me ↗️";
-        position: absolute;
-        inset: auto 0 0 auto;
-        padding: 0.5rem;
-        background: var(--green);
-        color: var(--warm-grey);
+  &::after {
+    content: "resize me ↗️";
+    position: absolute;
+    inset: auto 0 0 auto;
+    padding: 0.5rem;
+    background: var(--green);
+    color: var(--warm-grey);
 
-        writing-mode: vertical-lr;
-    }
+    writing-mode: vertical-lr;
+  }
 }
 
 .auto-grid:has(.item:focus-within) {
-    .item {
-        filter: blur(5px) grayscale(0.2);
-        scale: 0.95;
-    }
+  .item {
+    filter: blur(5px) grayscale(0.2);
+    scale: 0.95;
+  }
 
-    .item:focus-within {
-        filter: none;
-        scale: 1;
-    }
+  .item:focus-within {
+    filter: none;
+    scale: 1;
+  }
 }
 
 .item {
-    background-image: var(--gradient);
-    border-radius: var(--radius);
-    transition: 0.2s ease-in-out;
-    transition-property: filter, scale;
-    display: grid;
-    place-items: center;
-    padding: 1rem;
+  background-image: var(--gradient);
+  border-radius: var(--radius);
+  transition: 0.2s ease-in-out;
+  transition-property: filter, scale;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
 
-    &:hover {
-        filter: none;
-    }
+  &:hover {
+    filter: none;
+  }
 }
 
 .self-start {
-    place-self: start;
+  place-self: start;
 }
 .controls {
-    display: grid;
-    opacity: 0;
-    transition: 0.3s;
-    scale: 0 0;
-    transition-property: opacity, scale;
+  display: grid;
+  opacity: 0;
+  transition: 0.3s;
+  scale: 0 0;
+  transition-property: opacity, scale;
+  width: 100%;
+  height: 100%;
+  place-content: center;
+  padding: 1rem;
+  gap: 1rem;
+
+  &::before {
+    border-radius: var(--radius);
+    pointer-events: none;
+    display: block;
+    content: "";
     width: 100%;
     height: 100%;
-    place-content: center;
-    padding: 1rem;
-    gap: 1rem;
-
-    &::before {
-        border-radius: var(--radius);
-        pointer-events: none;
-        display: block;
-        content: "";
-        width: 100%;
-        height: 100%;
-        inset: 0;
-        position: absolute;
-        z-index: -1;
-        background: color-mix(in oklab, black, transparent);
-    }
+    inset: 0;
+    position: absolute;
+    z-index: -1;
+    background: color-mix(in oklab, black, transparent);
+  }
 }
 .item {
-    display: grid;
+  display: grid;
 
-    > * {
-        grid-area: 1 / 1;
-    }
+  > * {
+    grid-area: 1 / 1;
+  }
 
-    &:hover,
-    &:focus,
-    &:focus-within {
-        .controls {
-            opacity: 1;
-            scale: 1 1;
-        }
+  &:hover,
+  &:focus,
+  &:focus-within {
+    .controls {
+      opacity: 1;
+      scale: 1 1;
     }
+  }
 }
 
 main {
-    display: grid;
-    gap: 2rem;
+  display: grid;
+  gap: 2rem;
 }
 
 .config {
-    display: grid;
-    grid-template-columns: min-content auto;
+  display: grid;
+  grid-template-columns: min-content auto;
+  label {
+    white-space: nowrap;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    place-items: start;
+
+    input {
+      place-self: center end;
+    }
+  }
+
+  fieldset {
+    grid-column: 1 / -1;
+
     label {
-        white-space: nowrap;
-        grid-column: 1 / -1;
-        grid-template-columns: subgrid;
-        place-items: start;
+      grid-template-columns: min-content min-content;
     }
+  }
+}
 
-    fieldset {
-        grid-column: 1 / -1;
-
-        label {
-            grid-template-columns: min-content min-content;
-        }
-    }
+datalist {
+  display: flex;
+  flex-direction: row;
+  & > * {
+    margin-left: calc(var(--marker-value) * 1px);
+    transform: translateX(-50%);
+  }
 }

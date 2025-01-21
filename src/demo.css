@@ -16,6 +16,7 @@
         background: var(--warm-grey);
         padding: 2rem;
         color: #fff;
+        accent-color: var(--green);
     }
 
     #root {

@@ -1,29 +1,39 @@
-import { createMemo, createSignal, For, onMount } from "solid-js";
+import { createEffect, createMemo, createSignal, For, onMount } from "solid-js";
 import "./App.css";
 import { Element } from "./Element";
 
-const flowOptions = [
+export const flowOptions = [
   "row",
   "row dense",
   "column",
   "column dense",
   "dense",
 ] as const;
-type FlowOptions = (typeof flowOptions)[number];
+
+export type FlowOptions = (typeof flowOptions)[number];
+
+export const [forceAspect, setForceAspect] = createSignal(false);
 
 function App() {
   const [columns, setColumns] = createSignal(4);
   const [minSize, setMinSize] = createSignal(10);
   const [gap, setGap] = createSignal(2);
+  const [containerSize, setContainerSize] = createSignal<number | undefined>(
+    undefined
+  );
   const [flow, setFlow] = createSignal<FlowOptions>("row");
 
-  let resizer: HTMLDivElement | undefined;
+  const [maxContainerWidth, setMaxContainerWidth] = createSignal<
+    number | undefined
+  >(undefined);
+  const minContainerWidth = () => minSize() * 16;
 
+  let resizer: HTMLDivElement | undefined;
   const stylesheet = new CSSStyleSheet({});
 
   const breakPoint_1x = createMemo(() => 2 * gap() + minSize());
-
-  stylesheet.insertRule(`
+  const styleSheetRuleForContainerQuery = createMemo(() => {
+    return `
     @container auto-grid (width < ${breakPoint_1x()}rem) {
         .item {
             --item-c-span: 0;
@@ -32,14 +42,32 @@ function App() {
              filter: hue-rotate(120deg);
         }
     }
-    `);
+    `;
+  });
+
+  stylesheet.insertRule(styleSheetRuleForContainerQuery());
+
+  createEffect(() => {
+    stylesheet.replaceSync(styleSheetRuleForContainerQuery());
+  });
+
   onMount(() => {
-    document.adoptedStyleSheets = [...document.adoptedStyleSheets, stylesheet];
+    setMaxContainerWidth(resizer?.parentElement?.getBoundingClientRect().width);
+    setContainerSize(maxContainerWidth());
   });
 
   return (
     <main>
       <div class="config">
+        <label>
+          <input
+            type="checkbox"
+            checked={forceAspect()}
+            onInput={(ev) => setForceAspect(() => ev.currentTarget.checked)}
+          />
+          force aspect
+        </label>
+
         <label>
           <input
             id="auto-grid-max-columns"
@@ -49,18 +77,18 @@ function App() {
             step={1}
             onInput={(ev) => setColumns(ev.currentTarget.valueAsNumber)}
           />
-          max-columns
+          max-columns ({columns()})
         </label>
         <label>
           <input
             id="auto-grid-min-size"
             type="range"
             min={1}
-            max={10}
+            max={30}
             step={1}
             onInput={(ev) => setMinSize(ev.currentTarget.valueAsNumber)}
           />
-          min-size
+          min-size ({minSize()}rem)
         </label>
         <label>
           <input
@@ -71,7 +99,7 @@ function App() {
             step={0.5}
             onInput={(ev) => setGap(ev.currentTarget.valueAsNumber)}
           />
-          gap
+          gap ({gap()}rem)
         </label>
 
         <fieldset>
@@ -96,7 +124,38 @@ function App() {
         </fieldset>
       </div>
 
-      <div class="resize" ref={resizer}>
+      <label>
+        container size ({Math.round(containerSize() || 0)}px)
+        <input
+          id="auto-grid-max-columns"
+          type="range"
+          min={0}
+          max={maxContainerWidth() || 1000}
+          step={1}
+          list="markers"
+          value={containerSize()}
+          onInput={(ev) =>
+            setContainerSize(
+              Math.min(
+                ev.currentTarget.valueAsNumber,
+                maxContainerWidth() || 1000
+              )
+            )
+          }
+        />
+        <datalist id="markers">
+          <option
+            value={minContainerWidth()}
+            label="min-size"
+            style={{ "--marker-value": minContainerWidth() }}
+          ></option>
+        </datalist>
+      </label>
+      <div
+        class="resize"
+        ref={resizer}
+        style={{ width: `${containerSize()}px` }}
+      >
         <div
           class="auto-grid"
           style={{

@@ -1,5 +1,5 @@
 import { createSignal, ParentComponent } from "solid-js";
-
+import { forceAspect } from "./App";
 export type ElementProps = {
   columns?: number;
   rows?: number;
@@ -10,13 +10,13 @@ export const Element: ParentComponent<ElementProps> = (initialProps) => {
   const [columns, setColumns] = createSignal(initialProps.columns || 1);
   const [rows, setRows] = createSignal(initialProps.rows || 1);
   const [keepAspect, setKeepAspect] = createSignal(
-    initialProps.keepAspect || false,
+    initialProps.keepAspect || false
   );
 
   return (
     <div
       class={`item span-c-${columns()} span-r-${rows()}`}
-      classList={{ "keep-aspect": keepAspect() }}
+      classList={{ "keep-aspect": forceAspect() || keepAspect() }}
       tabIndex={0}
     >
       <div class="controls">
